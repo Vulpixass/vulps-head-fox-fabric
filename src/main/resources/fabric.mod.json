@@ -8,8 +8,8 @@
 		"Vulpixass"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://modrinth.com/project/vulps-head-fox",
+		"sources": "https://github.com/Vulpixass/vulps-head-fox-fabric"
 	},
 	"license": "MIT",
 	"icon": "assets/headfox/icon.png",
