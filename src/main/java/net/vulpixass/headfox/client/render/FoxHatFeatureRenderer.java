@@ -2,7 +2,9 @@ package net.vulpixass.headfox.client.render;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
+import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.RenderLayers;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.command.OrderedRenderCommandQueue;
 import net.minecraft.client.render.command.RenderCommandQueue;
@@ -17,17 +19,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.vulpixass.headfox.client.HeadFoxModelLayers;
 import net.vulpixass.headfox.client.model.fox_baby;
+import net.vulpixass.headfox.command.client.FoxTypesEnum;
 
 import java.util.UUID;
+
+import static net.vulpixass.headfox.command.client.ClientCommands.FoxType;
 
 public class FoxHatFeatureRenderer extends FeatureRenderer<PlayerEntityRenderState, PlayerEntityModel> {
     private long nextTwitchTime = 0;
     private float twitchAmount = 0;
     private final fox_baby foxModel;
+    public static int randomSoundTimer = 0;
+
     private FeatureRendererContext<PlayerEntityRenderState, PlayerEntityModel> context;
 
-    private static final Identifier FOX_TEXTURE =
-            Identifier.of("headfox", "textures/entity/fox_baby.png");
+    private static Identifier FOX_TEXTURE = Identifier.of("headfox", "textures/entity/regular_fox_baby.png");
 
     public FoxHatFeatureRenderer(FeatureRendererContext<PlayerEntityRenderState, PlayerEntityModel> context) {
         super(context);
@@ -44,6 +50,15 @@ public class FoxHatFeatureRenderer extends FeatureRenderer<PlayerEntityRenderSta
         PlayerEntity me = client.player;
         fox_baby fox = this.foxModel;
         PlayerEntity target = (PlayerEntity) client.world.getEntityById(state.id);
+        switch (FoxType) {
+            case FoxTypesEnum.REGULAR: FOX_TEXTURE = Identifier.of("headfox", "textures/entity/regular_fox_baby.png"); break;
+            case FoxTypesEnum.SNOW: FOX_TEXTURE = Identifier.of("headfox", "textures/entity/snow_fox_baby.png"); break;
+            case FoxTypesEnum.GHOST: FOX_TEXTURE = Identifier.of("headfox", "textures/entity/ghost_fox_baby.png"); break;
+            case FoxTypesEnum.SANTA: FOX_TEXTURE = Identifier.of("headfox", "textures/entity/santa_fox_baby.png"); break;
+            case FoxTypesEnum.ROBOT: FOX_TEXTURE = Identifier.of("headfox", "textures/entity/robot_fox_baby.png"); break;
+            case FoxTypesEnum.GINGERBREAD: FOX_TEXTURE = Identifier.of("headfox", "textures/entity/gingerbread_fox_baby.png"); break;
+            case FoxTypesEnum.RAINBOW: FOX_TEXTURE = Identifier.of("headfox", "textures/entity/rainbow_fox_baby.png"); break;
+        }
 
         if (me == null) return;
         if (target == null || !target.getUuid().equals(me.getUuid())) {return;}
@@ -76,7 +91,7 @@ public class FoxHatFeatureRenderer extends FeatureRenderer<PlayerEntityRenderSta
 
         //Render Fox
         fox.head.resetTransform();
-        FeatureRenderer.render(foxModel, FOX_TEXTURE, matrices, queue, light, state, 0xFFFFFF, 0);
+        queue.submitModel(foxModel, state, matrices, RenderLayers.entityTranslucent(FOX_TEXTURE), light, OverlayTexture.DEFAULT_UV, 0, null);
         matrices.pop();
     }
 }
